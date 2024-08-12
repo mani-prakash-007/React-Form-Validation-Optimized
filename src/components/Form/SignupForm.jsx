@@ -6,9 +6,14 @@ import {
   validateEmail,
   validatePassword,
   validateDate,
+  validateHobbies,
+  validateGender,
 } from "../utils/validation";
 
 export const SignupForm = () => {
+  //Constants
+  const hobbyOptions = ["Reading", "Traveling", " Cooking", " Sports"];
+  const genderOptions = ["Male", "Female"];
   //States
   //input state
   const [inputValue, setInputValue] = useState({
@@ -16,6 +21,8 @@ export const SignupForm = () => {
     email: "",
     password: "",
     date: "",
+    hobbies: [],
+    gender: "",
   });
   //Error state
   const [error, setError] = useState({
@@ -23,10 +30,41 @@ export const SignupForm = () => {
     emailError: "",
     passwordError: "",
     dateError: "",
+    hobbyErorr: "",
+    genderError: "",
   });
   //Form submit status state
   const [formStatus, setFormStatus] = useState(false);
 
+  // Function to handle Checkbox
+  const handleCheckbox = (e) => {
+    const value = e.target.value;
+    const isChecked = e.target.checked;
+
+    let updatedHobbies;
+
+    if (isChecked) {
+      updatedHobbies = [...inputValue.hobbies, value];
+    } else {
+      updatedHobbies = inputValue.hobbies.filter((item) => item !== value);
+    }
+
+    setInputValue({ ...inputValue, hobbies: updatedHobbies });
+    setError({ ...error, hobbyErorr: validateHobbies(updatedHobbies) });
+  };
+  //Function to handle Radiobox
+  const handleRadiobutton = (e) => {
+    const value = e.target.value;
+    const isChecked = e.target.checked;
+    let choosenGender = "";
+    if (isChecked) {
+      choosenGender = value;
+    } else {
+      choosenGender = "";
+    }
+    setInputValue({ ...inputValue, gender: choosenGender });
+    setError({ ...error, genderError: validateGender(choosenGender) });
+  };
   //Function for Submit
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -34,8 +72,8 @@ export const SignupForm = () => {
     const emailError = validateEmail(inputValue.email);
     const passwordError = validatePassword(inputValue.password);
     const dateError = validateDate(inputValue.date);
-    console.log("Date : ", inputValue.date);
-    console.log("Date Error : ", dateError);
+    const hobbyError = validateHobbies(inputValue.hobbies);
+    const genderError = validateGender(inputValue.gender);
     if (nameError) {
       setError({ ...error, nameError: nameError });
     } else if (emailError) {
@@ -44,13 +82,20 @@ export const SignupForm = () => {
       setError({ ...error, passwordError: passwordError });
     } else if (dateError) {
       setError({ ...error, dateError: dateError });
+    } else if (hobbyError) {
+      setError({ ...error, hobbyErorr: hobbyError });
+    } else if (genderError) {
+      setError({ ...error, genderError: genderError });
     } else {
       setFormStatus(true);
-      alert(`Form submitted...
-        Name : ${inputValue.name}
-        Email : ${inputValue.email}
-        Password : ******
-        Date : ${inputValue.date}`);
+      alert(`Form submitted
+        Details : 
+              Name : ${inputValue.name}
+              Email : ${inputValue.email}
+              Password : ******
+              Date : ${inputValue.date}
+              Hobbies : ${inputValue.hobbies}
+              Gender : ${inputValue.gender}`);
     }
   };
   return (
@@ -109,6 +154,47 @@ export const SignupForm = () => {
           }}
           error={error.dateError}
         />
+
+        {/*Hobbies*/}
+        <fieldset>
+          <legend className="font-bold">Hobbies</legend>
+          {hobbyOptions.map((hobby) => (
+            <div key={hobby}>
+              <input
+                type="checkbox"
+                name={hobby.toLowerCase()}
+                id={hobby.toLowerCase()}
+                value={hobby}
+                className="border border-black"
+                onChange={handleCheckbox}
+              />
+              <label htmlFor={hobby.toLowerCase()}>{hobby}</label>
+            </div>
+          ))}
+          {error.hobbyErorr && (
+            <p className="text-red-600">{error.hobbyErorr}</p>
+          )}
+        </fieldset>
+        {/*Gender*/}
+        <fieldset>
+          <legend className="font-bold">Gender</legend>
+          {genderOptions.map((gender) => (
+            <div key={gender}>
+              <input
+                type="radio"
+                name="gender"
+                id={gender.toLowerCase()}
+                value={gender}
+                className="border border-black"
+                onChange={handleRadiobutton}
+              />
+              <label htmlFor={gender.toLowerCase()}>{gender}</label>
+            </div>
+          ))}
+          {error.genderError && (
+            <p className="text-red-600">{error.genderError}</p>
+          )}
+        </fieldset>
 
         <Input type={"submit"} />
       </form>

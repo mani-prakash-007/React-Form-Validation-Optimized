@@ -80,3 +80,19 @@ export const validateDate = (date) => {
     return "";
   }
 };
+
+export const validateHobbies = (hobby) => {
+  if (hobby.length === 0) {
+    return "Select least one hobby";
+  } else {
+    return "";
+  }
+};
+
+export const validateGender = (gender) => {
+  if (gender.length === 0) {
+    return "Select your gender";
+  } else {
+    return "";
+  }
+};
