@@ -83,7 +83,7 @@ export const validateDate = (date) => {
 
 export const validateHobbies = (hobby) => {
   if (hobby.length === 0) {
-    return "Select least one hobby";
+    return "Select at least one hobby";
   } else {
     return "";
   }
