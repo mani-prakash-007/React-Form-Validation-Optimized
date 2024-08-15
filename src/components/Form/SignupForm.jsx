@@ -75,6 +75,19 @@ export const SignupForm = () => {
     }
     setInputValue({ ...inputValue, nationality: e.target.value });
   };
+  //Function for reset
+  const handleReset = () => {
+    setInputValue({
+      name: "",
+      email: "",
+      password: "",
+      date: "",
+      hobbies: [],
+      gender: "",
+      nationality: "Indian",
+      otherNationality: "None",
+    });
+  };
   //Function for Submit
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -101,16 +114,16 @@ export const SignupForm = () => {
       setError({ ...error, otherNationalityError: otherNationalityError });
     } else {
       setFormStatus(true);
-      //   alert(`Form submitted
-      //     Details :
-      //           Name : ${inputValue.name}
-      //           Email : ${inputValue.email}
-      //           Password : ******
-      //           Date : ${inputValue.date}
-      //           Hobbies : ${inputValue.hobbies}
-      //           Gender : ${inputValue.gender}
-      //           Nationality : ${inputValue.nationality}
-      //           Other Nationality : ${inputValue.otherNationality}`);
+      alert(`Form submitted
+          Details :
+                Name : ${inputValue.name}
+                Email : ${inputValue.email}
+                Password : ******
+                Date : ${inputValue.date}
+                Hobbies : ${inputValue.hobbies}
+                Gender : ${inputValue.gender}
+                Nationality : ${inputValue.nationality}
+                Other Nationality : ${inputValue.otherNationality}`);
     }
   };
   return (
@@ -118,10 +131,10 @@ export const SignupForm = () => {
       {formStatus ? (
         <>
           {console.log(inputValue.hobbies)}
-          <h2 className="font-bold text-green-600 my-4 pl-14 text-xl">
+          <h2 className="my-4 text-xl font-bold text-green-600 pl-14">
             Registration Success
           </h2>
-          <h2 className="font-bold text-lg my-2">Registration Details</h2>
+          <h2 className="my-2 text-lg font-bold">Registration Details</h2>
           <ul className="mx-5">
             <li>
               <span className="font-bold">Name : </span> {inputValue.name}
@@ -161,6 +174,7 @@ export const SignupForm = () => {
             id={"fname"}
             name={"fname"}
             type={"text"}
+            className={`${error.nameError ? "border-red-600" : "border-black"}`}
             onChange={(e) => {
               setInputValue({ ...inputValue, name: e.target.value });
               setError({ ...error, nameError: validateName(e.target.value) });
@@ -174,6 +188,9 @@ export const SignupForm = () => {
             id={"email"}
             name={"email"}
             type={"text"}
+            className={`${
+              error.emailError ? "border-red-600" : "border-black"
+            }`}
             onChange={(e) => {
               setInputValue({ ...inputValue, email: e.target.value });
               setError({ ...error, emailError: validateEmail(e.target.value) });
@@ -187,6 +204,9 @@ export const SignupForm = () => {
             id={"password"}
             name={"password"}
             type={"password"}
+            className={`${
+              error.passwordError ? "border-red-600" : "border-black"
+            }`}
             onChange={(e) => {
               setInputValue({ ...inputValue, password: e.target.value });
               setError({
@@ -202,6 +222,9 @@ export const SignupForm = () => {
             id={"date"}
             name={"date"}
             type={"date"}
+            className={`${
+              error.dateError ? "border-red-600 text-red-600" : "border-black"
+            }`}
             onChange={(e) => {
               setInputValue({ ...inputValue, date: e.target.value });
               setError({ ...error, dateError: validateDate(e.target.value) });
@@ -211,7 +234,7 @@ export const SignupForm = () => {
 
           {/*Hobbies*/}
           <fieldset>
-            <legend className="font-bold">Hobbies</legend>
+            <legend className="font-bold ">Hobbies</legend>
             {hobbyOptions.map((hobby) => (
               <div key={hobby}>
                 <input
@@ -219,7 +242,7 @@ export const SignupForm = () => {
                   name={hobby.toLowerCase()}
                   id={hobby.toLowerCase()}
                   value={hobby}
-                  className="border border-black mr-3"
+                  className="mr-3 border border-black"
                   onChange={handleCheckbox}
                 />
                 <label htmlFor={hobby.toLowerCase()}>{hobby}</label>
@@ -239,7 +262,7 @@ export const SignupForm = () => {
                   name="gender"
                   id={gender.toLowerCase()}
                   value={gender}
-                  className="border border-black mr-3"
+                  className="mr-3 border border-black"
                   onChange={handleRadiobutton}
                 />
                 <label htmlFor={gender.toLowerCase()}>{gender}</label>
@@ -257,21 +280,25 @@ export const SignupForm = () => {
           <select
             name="nationality"
             id="nationality"
-            className="border
-         border-black"
+            className="border border-black"
             onChange={handleDropdown}
           >
             <option value="Indian">Indian</option>
             <option value="Other">Other</option>
           </select>
           <br />
-          {inputValue.nationality === "other" && (
+          {inputValue.nationality === "Other" && (
             <>
               <Input
                 label={"Specify Nationality"}
                 id={"otherNationality"}
                 name={"otherNationality"}
                 type={"text"}
+                className={`${
+                  error.otherNationalityError
+                    ? "border-red-600"
+                    : "border-black"
+                }`}
                 onChange={(e) => {
                   setInputValue({
                     ...inputValue,
@@ -286,12 +313,23 @@ export const SignupForm = () => {
               />
             </>
           )}
-          <Input
-            type={"submit"}
-            className={
-              "cursor-pointer hover:bg-black hover:text-white active:scale-95"
-            }
-          />
+          <div className="flex flex-col justify-between">
+            <Input
+              type={"submit"}
+              className={
+                "cursor-pointer hover:bg-black hover:text-white active:scale-95"
+              }
+            />
+            <button
+              type="reset"
+              onClick={handleReset}
+              className={
+                "border border-black py-1.5 pl-3 pr-5 w-60 mb-2 rounded-lg  cursor-pointer hover:bg-black hover:text-white active:scale-95"
+              }
+            >
+              Reset
+            </button>
+          </div>
         </form>
       )}
     </>
